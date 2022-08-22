@@ -1,0 +1,2 @@
+listennode:panda_moveit_config
+-DCATKIN_DEVEL_PREFIX=/home/bianca/Trial/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/bianca/Trial/catkin_ws/install -G Unix Makefiles
