@@ -1,0 +1,104 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script type="text/javascript" src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--<script type="text/javascript" src="js/jquery/jquery-latest.js"></script>
+    <script type="text/javascript" src="js/ros/ros.js"></script>
+    <script type="text/javascript" src="js/ros/common.js"></script> -->
+</head>
+
+<body>
+	<div id="app" class="container">
+		<div class="jumbotron">
+			<h1>Hello from the Robot!</h1>
+		</div>
+
+		<div class="row" style="max-height:200px;">
+			<div class="col-md-6">
+				<h3>Connection status</h3>
+				<p class="text-danger" v-if="!connected">Not connected!</p>
+				<p class="text-success" v-else="connected">Connected!</p>
+				<label>Websocket server address</label>
+                <input type="text" v-model="ws_address" />
+                <br><br>
+                <button :disabled="loading" class="btn btn-danger" @click="disconnect" v-if="connect">Disconnect!</button>
+                <button :disabled="loading" class="btn btn-success" @click="connect" >Connect!</button> 
+			</div>
+			<div class="col-md-12" style="max-height:200px; overflow:auto;">
+				<h3>Log messages</h3>
+                <div>
+                    <p v-for="log of logs">{{ log }}</p>
+                </div>
+			</div>
+            <div class="col-md-12" style="max-height:200px; overflow:auto;">
+				<h3>Current Pose</h3>
+                <div>
+                    <label for = "name" >name</label>
+                    <input type ="text" id = "name" placeholder = "Name"><br>
+                </div>
+                <div class="col-md-12">
+                    <button @click.capture="saveToList" :disabled="loading || !connected" class="btn btn-primary">Save Current Pose</button>
+                    <br><br>
+                </div>
+                <div class="col-md-12-text-centre">
+                    <button @click.capture="startListener" :disabled="loading || !connected" class="btn btn-primary">Start Listener</button>
+                    <br><br>
+                </div>
+			</div>
+
+        <div class="row" style="max-height:200px;">
+            <div class="col-md-12" style="max-height:200px; overflow:auto;"></div>
+            <h3>Cascading Dropdown Example</h3><br><br><br>
+            <div>
+                <form name = "form1" id="form1" action = "/action_page.php">
+                    Pose 1: <select name="pose1" id="pose1">
+                        <option value = "" selected="selected">Select Pose</option>
+                    </select>
+                    <br><br>
+                    Pose 2: <select name="pose2" id="pose2">
+                        <option value = "" selected="selected">Select Pose</option>
+                    </select>
+                    <br><br>
+                    Pose 3: <select name="pose3" id="pose3">
+                        <option value = "" selected="selected">Select Pose</option>
+                    </select>
+                    <br><br>
+                    <div class="col-md-12">
+                        <button @click.capture ="setMessage" :disabled="loading || !connected" class="btn btn-danger">SendMessage</button>
+                        <br><br>
+                    </div>
+                    <!--<input type ="submit" value ="Submit">-->
+                </form>
+            </div>
+            
+		</div>
+
+        <hr>
+
+        <!--<div class="row">
+            <div class="col-md-12 text-center">
+                <h5>Commands</h5>
+            </div>
+            <div class="col-md-12 text-center">
+                <button @click="setTopic" :disabled="loading || !connected" class="btn btn-primary">SetTopic</button>
+                <br><br>
+            </div>
+            <div class="col-md-12 text-center">
+                <button @click.capture ="setMessage" :disabled="loading || !connected" class="btn btn-danger">SendMessage</button>
+                <br><br>
+            </div> 
+        </div>-->
+
+	</div>
+
+	<script type="text/javascript" src="main.js"></script>
+    <script>
+        
+        app.startListener()
+        
+    </script> 
+</body>
+
+</html>
