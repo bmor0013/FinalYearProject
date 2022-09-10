@@ -1,0 +1,8 @@
+prefix=/home/bianca/Trial/catkin_ws/devel
+
+Name: listennode
+Description: Description of listennode
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
