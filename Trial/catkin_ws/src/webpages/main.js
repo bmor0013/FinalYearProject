@@ -1,3 +1,4 @@
+
 var app = new Vue({
     el: '#app',
     // storing the state of the page
@@ -7,15 +8,15 @@ var app = new Vue({
         ws_address: 'ws://0.0.0.0:9090',
         logs: [],
         pose: [], 
-        localList: [],
-        localName: [], 
+        localName: [],
+        listSend: [], 
         loading: false,
         topic: null,
         msg: null,
         listener: null,
-        message: null, 
-        name: document.getElementById('name').value 
-        
+        //message: null,       
+        addSuccess: false,
+        poseCount: 0,
 
     },
     // helper methods to connect to ROS
@@ -51,9 +52,9 @@ var app = new Vue({
             })
         },
        
-        setMessage: function(message) {
-            if (message) {
-                this.msg = message.data 
+        setMessage: function(mail) {
+            if (mail) {
+                this.msg = mail 
             }
             else 
             { 
@@ -66,39 +67,76 @@ var app = new Vue({
             this.topic.publish(this.msg)            
         },
 
+
         setListener: function() {
             this.listener = new ROSLIB.Topic({
                 ros: this.ros,
                 name: '/talk',
                 messageType: 'geometry_msgs/Pose'
             })
+            this.connecttoDB()
+        },
+
+        connecttoDB: function(){
+            _MongoClient.connect(url,{useNewUrlParser:true},function(err,client){
+                if(err){
+                    console.log('Err',err); 
+
+                } else{
+                    console.log("Connected Successfully to the Server"); 
+                    db = client.db("websiteDB")
+                }
+            })
+
         },
 
         startListener: function () {
-            this.setListener()
-            this.listener.subscribe(function(message){
-                this.pose.unshift(message.data)
-                //window.localStorage.setItem(this.name,JSON.stringify(message))
-                this.listener.unsubscribe()
+            this.setListener(); 
+            this.listener.subscribe(function(message) {
+                app.pose.unshift(message)
+                app.listener.unsubscribe()
             })
         }, 
 
         saveToList: function () {
-            this.localList.unshift(this.pose[0])
-            this.localName.unshift(this.name)
-            //window.localStorage.setItem(this.name,JSON.stringify(message))
-
+            let pose1 = {
+                name: document.getElementById('name2').value,
+                data: this.pose[0]
+            }
+            this.localName.unshift(pose1)
+            this.addSuccess = true;
+            setTimeout(() => this.addSuccess = false, 5000)
         },
 
-        sendList: function (localList) {
-            for (i=0; i<length(localList); i++) {
-                this.setMessage(localList[i])
-                sleep(100)
+        selectPose: function(index) {
+            poseCount++
+            this.selectedPoses.push({index: 0})
+        },
+        saveToDB: function() {            
+            db.collection('poses').insertOne({
+                name: document.getElementById('name2').value,
+                data: this.pose[0]
+            })
+        },
+
+        sendList: function () {
+            //s = document.getElementById("dropDown").options[document.getElementById("dropDown").selectedIndex].text; 
+            //sent = app.localName.find(x => x.name === "pose1").data
+            //for(let i=0; i < this.poseCount; i++) {
+                
+            for (i= this.listSend.length; i==0; i--){
+                name2 = eval("pose"+(i+1)).options[eval("pose"+(i+1)).selectedIndex].text 
+                sent = app.localName.find(pose => pose.name == name2)
+                console.log(sent)
+                this.setMessage(sent.data)
+                //sleep(1000)
             }
         }
-        
     },
     mounted() {
     },
 })
-    
+
+
+
+//window.localStorage.setItem(this.name,JSON.stringify(message)) 
