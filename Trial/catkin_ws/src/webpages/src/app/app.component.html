@@ -1,0 +1,74 @@
+<html>
+
+<head>
+
+    <script type="text/javascript" src="https://static.robotwebtools.org/roslibjs/current/roslib.min.js"></script>
+
+
+</head>
+
+<body>
+    <div id="app">
+
+            <div class="jumbotron jumbotron-fluid" style="margin-bottom:0px; background-color: lightgray;">
+                <div class="container text-center">
+                    <h1>Welcome from the robot!</h1>
+                </div>
+            </div>
+
+
+        <div class="row" id="display" style="height: 100%;">
+            <div class="col-sm-3" id="connection">
+                <div class="container" style="margin-top:50%">
+                    <div class="row">
+                        <div class="container">
+                            <h3>Connection status</h3>
+                            <p class="text-danger" *ngIf="!connected">Not connected!</p>
+                            <p class="text-success" *ngIf="connected">Connected!</p>
+                            <label>Websocket server address</label>
+                            <input type="text" [(ngModel)]="ws_address" class="form-control" />
+                            <br><br>
+                            <button (click)="startListener()" class="btn btn-primary">Start Listener</button>
+                            <br><br>
+                        </div> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="container">
+                        <h3>Log messages</h3>
+                        <p *ngFor="let log of logs">{{ log }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col">
+                        <div class="container">
+                            <h3>Current Pose</h3>
+                            <input  type="text" [(ngModel)]="poseName"  placeholder="Name of pose" class="form-control" >
+                            <p *ngIf="addSuccess">Success!</p>
+                            <button (click)="onSavePose()" class="btn btn-primary">Save Current Pose</button>
+                            <button (click)="onDeletePose()" class="btn btn-danger">Delete Pose</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="container">
+                            <h3>Select Pose to Send to Robot</h3>
+                            <select *ngFor="let pose of poseCount; let i = index" class="form-control" required :id="{{'Pose'+i}}">
+                                <option>Select here</option>
+                                <option *ngFor="let name of localName" value=> {{ name.name }}</option>
+                            </select>
+                            <button (click)="newPoseBox()" class="btn btn-primary">Add Pose</button>
+                            <button (click)="sendList()" class="btn btn-danger">SendMessage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="main2.js"></script>
+</body>
+
+</html>
